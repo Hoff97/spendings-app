@@ -1,0 +1,17 @@
+<ActionBar title="test">
+  <StackLayout orientation="horizontal"
+    ios:horizontalAlignment="center"
+    android:horizontalAlignment="left">
+    <Label text="Set filters" class="action-label"></Label>
+  </StackLayout>
+</ActionBar>
+
+<GridLayout columns="100,*" rows="auto,auto,auto">
+  <Label text="From:" col="0" row="0" class="grid-label"></Label>
+  <DatePicker verticalAlignment="center" [(ngModel)]="from" col="1" row="0"></DatePicker>
+
+  <Label text="To:" col="0" row="1" class="grid-label"></Label>
+  <DatePicker verticalAlignment="center" [(ngModel)]="to" col="1" row="1"></DatePicker>
+
+  <Button text="Apply" (tap)="submit()" col="1" row="3"></Button>
+</GridLayout>
