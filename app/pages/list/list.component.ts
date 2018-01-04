@@ -5,6 +5,8 @@ import { Spending } from '../../shared/spending/spending'
 
 import { TextField } from "ui/text-field";
 
+import { Router } from "@angular/router";
+
 @Component({
   selector: "list",
   moduleId: module.id,
@@ -24,7 +26,7 @@ export class ListComponent implements OnInit {
   page = 0;
   searchField = "";
 
-  constructor(private spendingService: SpendingService) {}
+  constructor(private spendingService: SpendingService, private router: Router) {}
 
   ngOnInit() {
     this.isLoading = true;
@@ -48,5 +50,21 @@ export class ListComponent implements OnInit {
     let textField = <TextField>this.searchTextField.nativeElement;
     textField.dismissSoftInput();
     //TODO
+  }
+
+  filter() {
+    //TODO
+  }
+
+  del(spend: Spending) {
+    //TODO
+  }
+
+  edit(spend: Spending) {
+    //TODO
+  }
+
+  add() {
+    this.router.navigate(["/add"])
   }
 }

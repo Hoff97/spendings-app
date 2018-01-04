@@ -1,8 +1,18 @@
+<ActionBar title="test">
+  <StackLayout orientation="horizontal"
+    ios:horizontalAlignment="center"
+    android:horizontalAlignment="left">
+    <Label text="Spendings" class="action-label"></Label>
+  </StackLayout>
+</ActionBar>
+
 <GridLayout rows="auto, auto, *">
 
-  <GridLayout row="0" columns="*, auto" class="add-bar">
+  <GridLayout row="0" columns="*, auto, auto, auto" class="add-bar">
     <TextField #groceryTextField [(ngModel)]="searchField" hint="Search" (returnPress)="search()" col="0"></TextField>
-    <Image src="res://add" (tap)="search()" col="1"></Image>
+    <Image src="res://search" (tap)="search()" col="1"></Image>
+    <Image src="res://filter" (tap)="filter()" width="20" height="20" col="2"></Image>
+    <Image src="res://add" (tap)="add()" width="20" height="20" col="3"></Image>
   </GridLayout>
 
   <GridLayout row="1" columns="50, 100, 100, 100">
@@ -19,8 +29,8 @@
         <Label [text]="item.date" col="1" class="medium-spacing"></Label>
         <Label [text]="item.category.name" col="2" class="medium-spacing"></Label>
         <Label [text]="item.amount" col="3" class="medium-spacing"></Label>
-        <Image src="res://add" (tap)="edit()" col="4" width="20" height="20"></Image>
-        <Image src="res://delete" (tap)="delete()" col="5" width="20" height="20"></Image>
+        <Image src="res://edit" (tap)="edit(item)" col="4" width="20" height="20"></Image>
+        <Image src="res://delete" (tap)="del(item)" col="5" width="20" height="20"></Image>
       </GridLayout>
     </ng-template>
   </ListView>
