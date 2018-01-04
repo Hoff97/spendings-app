@@ -8,6 +8,8 @@ import { Router } from "@angular/router";
 
 import { DatePicker } from "ui/date-picker";
 
+import { Page } from "ui/page";
+
 @Component({
   selector: "add",
   moduleId: module.id,
@@ -18,17 +20,48 @@ import { DatePicker } from "ui/date-picker";
 export class AddComponent implements OnInit {
   spending: Spending;
   date: Date;
+  categories: Array<Category>;
+  test = ["A","Hallo","Jo"];
+
+  private autocmp;
 
   constructor(private spendingService: SpendingService, private router: Router) {
     this.spending = new Spending(0,0,new Category(0,"",0),
                                  "","");
     this.date = new Date();
+
+    this.spendingService.getCategories()
+      .subscribe(cat => {this.categories = cat;console.log(JSON.stringify(cat));});
   }
 
   ngOnInit() {
   }
 
   submit() {
-    console.log(this.date);
+    console.log("yay");
+
+    let dateS = this.date.getFullYear()
+      + "-" + (this.date.getMonth() < 10 ? "0" : "") + this.date.getMonth()
+      + "-" + (this.date.getDay() < 10 ? "0" : "") + this.date.getDay();
+    let catI = -1;
+    for(var cat of this.categories) {
+      if(cat.name == this.spending.category.name)
+        catI = cat.id;
+    }
+    if(catI == -1) {
+      this.spendingService.addCategory(this.spending.category.name)
+        .subscribe(c => {
+          catI = c.id
+          this.spendingService.add(dateS,catI,this.spending.amount,this.spending.description)
+            .subscribe(spend => {
+              this.router.navigate(["/list"]);
+            });
+        });
+    } else {
+      this.spendingService.add(dateS,catI,this.spending.amount,this.spending.description)
+      .subscribe(spend => {
+        this.router.navigate(["/list"]);
+      });
+    }
   }
 }

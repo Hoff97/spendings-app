@@ -58,7 +58,65 @@ export class SpendingService {
     return Observable.throw(error);
   }
 
-  add(name: string) {
-    //TODO
+  add(date: string, categoryId: number, amount: number, description: string) {
+     let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("x-auth-token", Config.token);
+
+    return this.http.post(
+      Config.apiUrl + "api/spending",
+      JSON.stringify({
+        date: date,
+        categoryFk: categoryId,
+        description: description,
+        amount: amount,
+        userFk: 0
+      }),
+      { headers: headers }
+    )
+      .map(response => response.json())
+      .do(data => {
+        console.log(data);
+      })
+        .catch(this.handleErrors);
+  }
+
+  addCategory(name: string) {
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("x-auth-token", Config.token);
+
+    return this.http.post(
+      Config.apiUrl + "api/category",
+      JSON.stringify({
+        name: name,
+        parent: 0
+      }),
+      { headers: headers }
+    )
+      .map(response => response.json())
+      .do(data => {
+        console.log(data);
+      })
+        .catch(this.handleErrors);
+  }
+
+  getCategories() {
+    let headers = new Headers();
+    headers.append("x-auth-token", Config.token);
+    headers.append("Content-Type", "application/json");
+
+    return this.http.get(Config.apiUrl + "api/category", {
+      headers: headers
+    })
+    .map(res => res.json())
+    .map(data => {
+      let categoryList = [];
+      data.forEach((category) => {
+        categoryList.push(new Category(category.id,category.name,category.parent));
+      });
+      return categoryList;
+    })
+    .catch(this.handleErrors);
   }
 }

@@ -9,7 +9,7 @@
 <GridLayout columns="100,*" rows="auto,auto,auto,auto,auto">
   <Label text="Category:" col="0" row="0" class="grid-label"></Label>
   <TextField hint="Category" [(ngModel)]="spending.category.name"
-    autocapitalizationType="none" col="1" row="0"></TextField>
+       autocapitalizationType="none" col="1" row="0"></TextField>
 
   <Label text="Amount:" col="0" row="1" class="grid-label"></Label>
   <TextField hint="Amount" [(ngModel)]="spending.amount" col="1" row="1"></TextField>
@@ -20,5 +20,5 @@
   <Label text="Description:" col="0" row="3" class="grid-label"></Label>
   <TextField hint="Description" [(ngModel)]="spending.description" col="1" row="3"></TextField>
 
-  <Button text="Save" class="submit-button" (tap)="submit()" col="1" row="4"></Button>
+  <Button text="Save" (tap)="submit()" col="1" row="4"></Button>
 </GridLayout>
