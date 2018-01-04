@@ -27,37 +27,46 @@ export class ListComponent implements OnInit {
 
   page = 0;
   total = 0;
+  pageSize = 20;
   searchField = "";
+  hasNext: boolean;
+
+  from = new Date();
+  to = new Date();
 
   constructor(private spendingService: SpendingService, private router: Router) {}
 
   ngOnInit() {
-    this.load();
+    this.from.setDate(0);
+    this.from.setMinutes(0);
+    this.from.setHours(0);
+
+    this.isLoading = true;
+    this.listLoaded = false;
+    this.search();
   }
 
   search() {
     // Dismiss the keyboard
-    let textField = <TextField>this.searchTextField.nativeElement;
-    textField.dismissSoftInput();
-    //TODO
+    /*let textField = <TextField>this.searchTextField.nativeElement;
+    textField.dismissSoftInput();*/
+    this.spendingList = [];
+    this.isLoading = true;
+    this.listLoaded = false;
+    this.spendingService.query(this.searchField, "id", this.from, this.to, this.page)
+      .subscribe(res => {
+        res.spendings.forEach((spend) => {
+          this.spendingList.unshift(spend);
+        });
+        this.total = res.total;
+        this.hasNext = this.total>this.pageSize*(this.page+1);
+        this.isLoading = false;
+        this.listLoaded = true;
+      });
   }
 
   filter() {
     //TODO
-  }
-
-  load() {
-    this.spendingList = [];
-    this.isLoading = true;
-    this.listLoaded = false;
-    this.spendingService.load()
-      .subscribe(loadedSpendings => {
-        loadedSpendings.forEach((spend) => {
-          this.spendingList.unshift(spend);
-        });
-        this.isLoading = false;
-        this.listLoaded = true;
-      });
   }
 
   del(spend: Spending) {
@@ -65,7 +74,7 @@ export class ListComponent implements OnInit {
       if(result) {
         this.spendingService.delete(spend)
           .subscribe(y => {
-            this.load();
+            this.search();
           });
       }
     });

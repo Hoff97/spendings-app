@@ -39,7 +39,7 @@ export class AddComponent implements OnInit {
 
   submit() {
     let dateS = this.date.getFullYear()
-      + "-" + (this.date.getMonth() < 10 ? "0" : "") + this.date.getMonth()
+      + "-" + (this.date.getMonth()+1 < 10 ? "0" : "") + (this.date.getMonth()+1)
       + "-" + (this.date.getDay() < 10 ? "0" : "") + this.date.getDay();
     let catI = -1;
     for(var cat of this.categories) {
