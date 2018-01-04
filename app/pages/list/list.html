@@ -9,7 +9,7 @@
 <GridLayout rows="auto, auto, *, auto">
 
   <GridLayout row="0" columns="*, auto, auto, auto" class="add-bar">
-    <TextField #groceryTextField [(ngModel)]="searchField" hint="Search" (returnPress)="search()" col="0"></TextField>
+    <TextField [(ngModel)]="searchField" hint="Search" (returnPress)="search()" col="0" #search></TextField>
     <Image src="res://search" (tap)="search()" col="1"></Image>
     <Image src="res://filter" (tap)="filter()" width="20" height="20" col="2"></Image>
     <Image src="res://add" (tap)="add()" width="20" height="20" col="3"></Image>

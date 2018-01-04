@@ -2,14 +2,13 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 
 import { SpendingService } from "../../shared/spending/spending.service";
 import { Spending } from '../../shared/spending/spending'
+import { FilterService } from "../../shared/filter.service";
 
 import { TextField } from "ui/text-field";
 
 import { Router } from "@angular/router";
 
 import * as dialogs from "ui/dialogs";
-
-import { PageRoute } from "nativescript-angular/router";
 
 @Component({
   selector: "list",
@@ -29,7 +28,7 @@ export class ListComponent implements OnInit {
 
   page = 0;
   total = 0;
-  pageSize = 5;
+  pageSize = 20;
   searchField = "";
   hasNext: boolean;
   totalText = "";
@@ -37,21 +36,12 @@ export class ListComponent implements OnInit {
   from = new Date();
   to = new Date();
 
-  constructor(private spendingService: SpendingService, private router: Router, private pageRoute: PageRoute) {}
+  constructor(private spendingService: SpendingService, private router: Router,
+              private filterService: FilterService) {}
 
   ngOnInit() {
-    this.pageRoute.activatedRoute
-      .switchMap(activatedRoute => activatedRoute.params)
-      .forEach((params) => {
-        if(params["from"])
-          this.from = params["from"];
-        if(params["to"])
-          this.to = params["to"];
-      });
-
-    this.from.setDate(0);
-    this.from.setMinutes(0);
-    this.from.setHours(0);
+    this.from = this.filterService.from;
+    this.to = this.filterService.to;
 
     this.isLoading = true;
     this.listLoaded = false;
@@ -62,6 +52,7 @@ export class ListComponent implements OnInit {
     // Dismiss the keyboard
     /*let textField = <TextField>this.searchTextField.nativeElement;
     textField.dismissSoftInput();*/
+
     this.spendingList = [];
     this.isLoading = true;
     this.listLoaded = false;
@@ -82,7 +73,7 @@ export class ListComponent implements OnInit {
   }
 
   filter() {
-    //TODO
+    this.router.navigate(["/filter"]);
   }
 
   del(spend: Spending) {
@@ -97,7 +88,8 @@ export class ListComponent implements OnInit {
   }
 
   edit(spend: Spending) {
-    //TODO
+    this.spendingService.editing = spend.clone();
+    this.router.navigate(["/edit"]);
   }
 
   add() {

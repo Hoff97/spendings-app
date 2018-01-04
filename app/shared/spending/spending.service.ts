@@ -11,6 +11,8 @@ import * as moment from 'moment';
 
 @Injectable()
 export class SpendingService {
+  editing: Spending;
+
   constructor(private http: Http) {}
 
   query(search: string, sort: string, fro: Date, to: Date, page: number, pageSize: number) {
