@@ -71,6 +71,30 @@ export class SpendingService {
         .catch(this.handleErrors);
   }
 
+  edit(id: number, date: string, categoryId: number, amount: number, description: string) {
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("x-auth-token", Config.token);
+
+    return this.http.put(
+      Config.apiUrl + "api/spending/" + id,
+      JSON.stringify({
+        id: id,
+        date: date,
+        categoryFk: categoryId,
+        description: description,
+        amount: amount,
+        userFk: 0
+      }),
+      { headers: headers }
+    )
+      .map(response => response.json())
+      .do(data => {
+        console.log(data);
+      })
+        .catch(this.handleErrors);
+  }
+
   delete(spending: Spending) {
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -86,6 +110,7 @@ export class SpendingService {
       })
         .catch(this.handleErrors);
   }
+
 
   addCategory(name: string) {
     let headers = new Headers();

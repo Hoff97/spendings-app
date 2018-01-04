@@ -88,7 +88,7 @@ export class ListComponent implements OnInit {
   }
 
   edit(spend: Spending) {
-    this.spendingService.editing = spend.clone();
+    this.filterService.edit = spend.clone();
     this.router.navigate(["/edit"]);
   }
 
