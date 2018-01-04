@@ -7,6 +7,8 @@ import { TextField } from "ui/text-field";
 
 import { Router } from "@angular/router";
 
+import * as dialogs from "ui/dialogs";
+
 @Component({
   selector: "list",
   moduleId: module.id,
@@ -24,28 +26,16 @@ export class ListComponent implements OnInit {
   @ViewChild("search") searchTextField: ElementRef;
 
   page = 0;
+  total = 0;
   searchField = "";
 
   constructor(private spendingService: SpendingService, private router: Router) {}
 
   ngOnInit() {
-    this.isLoading = true;
-    this.spendingService.load()
-      .subscribe(loadedGroceries => {
-        loadedGroceries.forEach((groceryObject) => {
-          this.spendingList.unshift(groceryObject);
-        });
-        this.isLoading = false;
-        this.listLoaded = true;
-      });
+    this.load();
   }
 
   search() {
-    if (this.searchField.trim() === "") {
-      alert("Enter a non empty search");
-      return;
-    }
-
     // Dismiss the keyboard
     let textField = <TextField>this.searchTextField.nativeElement;
     textField.dismissSoftInput();
@@ -56,8 +46,29 @@ export class ListComponent implements OnInit {
     //TODO
   }
 
+  load() {
+    this.spendingList = [];
+    this.isLoading = true;
+    this.listLoaded = false;
+    this.spendingService.load()
+      .subscribe(loadedSpendings => {
+        loadedSpendings.forEach((spend) => {
+          this.spendingList.unshift(spend);
+        });
+        this.isLoading = false;
+        this.listLoaded = true;
+      });
+  }
+
   del(spend: Spending) {
-    //TODO
+    dialogs.confirm("Do you really want to delete the spending " + JSON.stringify(spend)).then(result => {
+      if(result) {
+        this.spendingService.delete(spend)
+          .subscribe(y => {
+            this.load();
+          });
+      }
+    });
   }
 
   edit(spend: Spending) {
@@ -65,6 +76,6 @@ export class ListComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(["/add"])
+    this.router.navigate(["/add"]);
   }
 }

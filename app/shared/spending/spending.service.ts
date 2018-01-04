@@ -32,12 +32,18 @@ export class SpendingService {
     .catch(this.handleErrors);
   }
 
-  query(search: string, sort: string, from: string, to: string) {
+  query(search: string, sort: string, fro: string, to: string, page: number) {
     let headers = new Headers();
     headers.append("x-auth-token", Config.token);
     headers.append("Content-Type", "application/json");
+    headers.append("x-page", page + "");
 
-    return this.http.get(Config.apiUrl + "api/spending?sortDir=true", {
+    let url = "api/spending?sortDir=true&sort=" + sort
+      + "&from=" + fro
+      + "&to=" + to
+      + "&search=" + search;
+
+    return this.http.get(Config.apiUrl + url, {
       headers: headers
     })
     .map(res => res.json())
@@ -72,6 +78,22 @@ export class SpendingService {
         amount: amount,
         userFk: 0
       }),
+      { headers: headers }
+    )
+      .map(response => response.json())
+      .do(data => {
+        console.log(data);
+      })
+        .catch(this.handleErrors);
+  }
+
+  delete(spending: Spending) {
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("x-auth-token", Config.token);
+
+    return this.http.delete(
+      Config.apiUrl + "api/spending/" + spending.id,
       { headers: headers }
     )
       .map(response => response.json())

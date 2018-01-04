@@ -38,8 +38,6 @@ export class AddComponent implements OnInit {
   }
 
   submit() {
-    console.log("yay");
-
     let dateS = this.date.getFullYear()
       + "-" + (this.date.getMonth() < 10 ? "0" : "") + this.date.getMonth()
       + "-" + (this.date.getDay() < 10 ? "0" : "") + this.date.getDay();
