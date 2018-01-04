@@ -2,14 +2,21 @@
   background-color: #CB1D00;
   padding: 5 10;
 }
+
 .add-bar Image {
   height: 15;
   vertical-align: center;
   margin-left: 10;
   margin-right: 5;
 }
+
 TextField {
   color: white;
+}
+
+.header-bar {
+    background-color: #CCCCCC;
+    padding: 5 10;
 }
 
 ListView {

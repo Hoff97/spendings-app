@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 
-import { Grocery } from "../../shared/grocery/grocery";
-import { GroceryListService } from "../../shared/grocery/grocery-list.service";
+import { SpendingService } from "../../shared/spending/spending.service";
+import { Spending } from '../../shared/spending/spending'
 
 import { TextField } from "ui/text-field";
 
@@ -10,55 +10,43 @@ import { TextField } from "ui/text-field";
   moduleId: module.id,
   templateUrl: "./list.html",
   styleUrls: ["./list-common.css", "./list.css"],
-  providers: [GroceryListService]
+  providers: [SpendingService]
 })
 export class ListComponent implements OnInit {
-  groceryList: Array<Grocery> = [];
+  spendingList: Array<Spending> = [];
 
   isLoading = true;
-
   listLoaded = false;
 
   grocery = "";
-  @ViewChild("groceryTextField") groceryTextField: ElementRef;
+  @ViewChild("search") searchTextField: ElementRef;
 
-  constructor(private groceryListService: GroceryListService) {}
+  page = 0;
+  searchField = "";
+
+  constructor(private spendingService: SpendingService) {}
 
   ngOnInit() {
     this.isLoading = true;
-    this.groceryListService.load()
+    this.spendingService.load()
       .subscribe(loadedGroceries => {
         loadedGroceries.forEach((groceryObject) => {
-          this.groceryList.unshift(groceryObject);
+          this.spendingList.unshift(groceryObject);
         });
         this.isLoading = false;
         this.listLoaded = true;
       });
   }
 
-  add() {
-    if (this.grocery.trim() === "") {
-      alert("Enter a grocery item");
+  search() {
+    if (this.searchField.trim() === "") {
+      alert("Enter a non empty search");
       return;
     }
 
     // Dismiss the keyboard
-    let textField = <TextField>this.groceryTextField.nativeElement;
+    let textField = <TextField>this.searchTextField.nativeElement;
     textField.dismissSoftInput();
-
-    this.groceryListService.add(this.grocery)
-      .subscribe(
-        groceryObject => {
-          this.groceryList.unshift(groceryObject);
-          this.grocery = "";
-        },
-        () => {
-          alert({
-            message: "An error occurred while adding an item to your list.",
-            okButtonText: "OK"
-          });
-          this.grocery = "";
-        }
-      )
+    //TODO
   }
 }

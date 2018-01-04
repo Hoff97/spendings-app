@@ -16,11 +16,12 @@ export class UserService {
     headers.append("Content-Type", "application/json");
 
     return this.http.post(
-      Config.apiUrl + "Users",
+      Config.apiUrl + "api/signUp",
       JSON.stringify({
-        Username: user.email,
-        Email: user.email,
-        Password: user.password
+        firstName: user.email,
+        lastName: "",
+        email: user.email,
+        password: user.password
       }),
       { headers: headers }
     )
@@ -28,7 +29,7 @@ export class UserService {
   }
 
   handleErrors(error: Response) {
-    console.log(JSON.stringify(error.json()));
+    console.log(JSON.stringify(error.toString()));
     return Observable.throw(error);
   }
 
@@ -37,17 +38,17 @@ export class UserService {
     headers.append("Content-Type", "application/json");
 
     return this.http.post(
-      Config.apiUrl + "oauth/token",
+      Config.apiUrl + "api/signIn",
       JSON.stringify({
-        username: user.email,
+        email: user.email,
         password: user.password,
-        grant_type: "password"
+        rememberMe: true
       }),
       { headers: headers }
     )
       .map(response => response.json())
       .do(data => {
-        Config.token = data.Result.access_token;
+        Config.token = data.token;
       })
         .catch(this.handleErrors);
   }

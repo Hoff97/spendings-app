@@ -1,15 +1,29 @@
-<GridLayout rows="auto, *">
+<GridLayout rows="auto, auto, *">
 
   <GridLayout row="0" columns="*, auto" class="add-bar">
-    <TextField #groceryTextField [(ngModel)]="grocery" hint="Enter a grocery item" (returnPress)="add()" col="0"></TextField>
-    <Image src="res://add" (tap)="add()" col="1"></Image>
+    <TextField #groceryTextField [(ngModel)]="searchField" hint="Search" (returnPress)="search()" col="0"></TextField>
+    <Image src="res://add" (tap)="search()" col="1"></Image>
   </GridLayout>
 
-  <ListView [items]="groceryList" row="1" class="small-spacing" [class.visible]="listLoaded">
+  <GridLayout row="1" columns="50, 100, 100, 100">
+    <Label text="Id" col="0" class="medium-spacing"></Label>
+    <Label text="Date" col="1" class="medium-spacing"></Label>
+    <Label text="Category" col="2" class="medium-spacing"></Label>
+    <Label text="Amount" col="3" class="medium-spacing"></Label>
+  </GridLayout>
+
+  <ListView [items]="spendingList" row="2" class="small-spacing" [class.visible]="listLoaded">
     <ng-template let-item="item">
-      <Label [text]="item.name" class="medium-spacing"></Label>
+      <GridLayout columns="50, 100, 100, 100, *, *">
+        <Label [text]="item.id" col="0" class="medium-spacing"></Label>
+        <Label [text]="item.date" col="1" class="medium-spacing"></Label>
+        <Label [text]="item.category.name" col="2" class="medium-spacing"></Label>
+        <Label [text]="item.amount" col="3" class="medium-spacing"></Label>
+        <Image src="res://add" (tap)="edit()" col="4" width="20" height="20"></Image>
+        <Image src="res://delete" (tap)="delete()" col="5" width="20" height="20"></Image>
+      </GridLayout>
     </ng-template>
   </ListView>
 
-  <ActivityIndicator [busy]="isLoading" [visibility]="isLoading ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
+  <ActivityIndicator [busy]="isLoading" [visibility]="isLoading ? 'visible' : 'collapse'" row="2" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
 </GridLayout>
