@@ -27,9 +27,10 @@ export class ListComponent implements OnInit {
 
   page = 0;
   total = 0;
-  pageSize = 20;
+  pageSize = 5;
   searchField = "";
   hasNext: boolean;
+  totalText = "";
 
   from = new Date();
   to = new Date();
@@ -53,13 +54,17 @@ export class ListComponent implements OnInit {
     this.spendingList = [];
     this.isLoading = true;
     this.listLoaded = false;
-    this.spendingService.query(this.searchField, "id", this.from, this.to, this.page)
+    this.spendingService.query(this.searchField, "id", this.from, this.to, this.page, this.pageSize)
       .subscribe(res => {
         res.spendings.forEach((spend) => {
           this.spendingList.unshift(spend);
         });
         this.total = res.total;
         this.hasNext = this.total>this.pageSize*(this.page+1);
+
+        let start = this.page*this.pageSize+1
+        this.totalText = start + "-" + (start + this.spendingList.length - 1) + "/" + this.total;
+
         this.isLoading = false;
         this.listLoaded = true;
       });
@@ -86,5 +91,19 @@ export class ListComponent implements OnInit {
 
   add() {
     this.router.navigate(["/add"]);
+  }
+
+  prev() {
+    if(this.page>0) {
+      this.page--;
+      this.search();
+    }
+  }
+
+  next() {
+    if(this.hasNext) {
+      this.page++;
+      this.search();
+    }
   }
 }

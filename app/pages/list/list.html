@@ -38,8 +38,8 @@
   <ActivityIndicator [busy]="isLoading" [visibility]="isLoading ? 'visible' : 'collapse'" row="2" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
 
   <GridLayout row="3" columns="auto,*,auto">
-    <Label text="Prev" col="0" class="medium-spacing"></Label>
-    <Label text="NumItems" col="1" class="medium-spacing"></Label>
-    <Label text="Next" col="2" class="medium-spacing"></Label>
+    <Label text="Prev" col="0" class="medium-spacing" (tap)="prev()"></Label>
+    <Label [text]="totalText" col="1" class="medium-spacing"></Label>
+    <Label text="Next" col="2" class="medium-spacing" (tap)="next()"></Label>
   </GridLayout>
 </GridLayout>

@@ -13,11 +13,12 @@ import * as moment from 'moment';
 export class SpendingService {
   constructor(private http: Http) {}
 
-  query(search: string, sort: string, fro: Date, to: Date, page: number) {
+  query(search: string, sort: string, fro: Date, to: Date, page: number, pageSize: number) {
     let headers = new Headers();
     headers.append("x-auth-token", Config.token);
     headers.append("Content-Type", "application/json");
     headers.append("x-page", page + "");
+    headers.append("x-page-size", pageSize + "");
 
     let url = "api/spending?sortDir=true&sort=" + sort
       + "&from=" + moment(fro).format("YYYY-MM-DD")
