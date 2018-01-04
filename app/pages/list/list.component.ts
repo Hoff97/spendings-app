@@ -9,6 +9,8 @@ import { Router } from "@angular/router";
 
 import * as dialogs from "ui/dialogs";
 
+import { PageRoute } from "nativescript-angular/router";
+
 @Component({
   selector: "list",
   moduleId: module.id,
@@ -35,9 +37,18 @@ export class ListComponent implements OnInit {
   from = new Date();
   to = new Date();
 
-  constructor(private spendingService: SpendingService, private router: Router) {}
+  constructor(private spendingService: SpendingService, private router: Router, private pageRoute: PageRoute) {}
 
   ngOnInit() {
+    this.pageRoute.activatedRoute
+      .switchMap(activatedRoute => activatedRoute.params)
+      .forEach((params) => {
+        if(params["from"])
+          this.from = params["from"];
+        if(params["to"])
+          this.to = params["to"];
+      });
+
     this.from.setDate(0);
     this.from.setMinutes(0);
     this.from.setHours(0);
