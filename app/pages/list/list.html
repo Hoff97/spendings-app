@@ -9,28 +9,26 @@
 <GridLayout rows="auto, auto, *, auto">
 
   <GridLayout row="0" columns="*, auto, auto, auto" class="add-bar">
-    <TextField [(ngModel)]="searchField" hint="Search" (returnPress)="search()" col="0" #search></TextField>
+    <TextField [(ngModel)]="searchField" hint="Search" (returnPress)="search()" col="0"></TextField>
     <Image src="res://search" (tap)="search()" col="1"></Image>
     <Image src="res://filter" (tap)="filter()" width="20" height="20" col="2"></Image>
     <Image src="res://add" (tap)="add()" width="20" height="20" col="3"></Image>
   </GridLayout>
 
-  <GridLayout row="1" columns="50, 100, 100, 100">
-    <Label text="Id" col="0" class="medium-spacing"></Label>
-    <Label text="Date" col="1" class="medium-spacing"></Label>
-    <Label text="Category" col="2" class="medium-spacing"></Label>
-    <Label text="Amount" col="3" class="medium-spacing"></Label>
+  <GridLayout row="1" columns="100, 90, 80">
+    <Label text="Date" col="0" class="medium-spacing"></Label>
+    <Label text="Category" col="1" class="medium-spacing"></Label>
+    <Label text="Amount" col="2" class="medium-spacing"></Label>
   </GridLayout>
 
   <ListView [items]="spendingList" row="2" class="small-spacing" [class.visible]="listLoaded">
     <ng-template let-item="item">
-      <GridLayout columns="50, 100, 100, 100, *, *">
-        <Label [text]="item.id" col="0" class="medium-spacing"></Label>
-        <Label [text]="item.date" col="1" class="medium-spacing"></Label>
-        <Label [text]="item.category.name" col="2" class="medium-spacing"></Label>
-        <Label [text]="item.amount" col="3" class="medium-spacing"></Label>
-        <Image src="res://edit" (tap)="edit(item)" col="4" width="20" height="20"></Image>
-        <Image src="res://delete" (tap)="del(item)" col="5" width="20" height="20"></Image>
+      <GridLayout columns="100, 90, 80, *, *" (tap)="detail(item)">
+        <Label [text]="item.date" col="0" class="medium-spacing"></Label>
+        <Label [text]="item.category.name" col="1" class="medium-spacing"></Label>
+        <Label [text]="item.amount" col="2" class="medium-spacing"></Label>
+        <Image src="res://edit" (tap)="edit(item)" col="3" width="20" height="20"></Image>
+        <Image src="res://delete" (tap)="del(item)" col="4" width="20" height="20"></Image>
       </GridLayout>
     </ng-template>
   </ListView>

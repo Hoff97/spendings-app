@@ -1,0 +1,27 @@
+<ActionBar title="test">
+  <StackLayout orientation="horizontal"
+    ios:horizontalAlignment="center"
+    android:horizontalAlignment="left">
+    <Label text="Spending details" class="action-label"></Label>
+  </StackLayout>
+</ActionBar>
+
+<GridLayout columns="100,*" rows="auto,auto,auto,auto,auto,auto,auto">
+  <Label text="ID:" col="0" row="0" class="grid-label"></Label>
+  <Label [text]="spending.id" col="1" row="0" class="grid-label"></Label>
+
+  <Label text="Category:" col="0" row="1" class="grid-label"></Label>
+  <Label [text]="spending.category.name" col="1" row="1" class="grid-label"></Label>
+
+  <Label text="Amount:" col="0" row="2" class="grid-label"></Label>
+  <Label [text]="spending.amount" col="1" row="2" class="grid-label"></Label>
+
+  <Label text="Date:" col="0" row="3" class="grid-label"></Label>
+  <Label [text]="spending.date" col="1" row="3" class="grid-label"></Label>
+
+  <Label text="Description:" col="0" row="4" class="grid-label"></Label>
+  <Label [text]="spending.description" col="1" row="4" class="grid-label"></Label>
+
+  <Button text="Edit" (tap)="submit()" col="1" row="5"></Button>
+  <Button text="Delete" (tap)="delete()" col="1" row="6" class="delete"></Button>
+</GridLayout>
