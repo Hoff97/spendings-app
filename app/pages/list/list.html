@@ -1,9 +1,8 @@
 <ActionBar title="test">
-  <StackLayout orientation="horizontal"
-    ios:horizontalAlignment="center"
-    android:horizontalAlignment="left">
-    <Label text="Spendings" class="action-label"></Label>
-  </StackLayout>
+  <GridLayout columns="*, 20">
+    <Label text="Spendings" class="action-label" column="0"></Label>
+    <Image src="res://donut" width="20" height="20" class="right" column="2" class="right" [nsRouterLink]="['/sum']"></Image>
+  </GridLayout>
 </ActionBar>
 
 <GridLayout rows="auto, auto, *, auto">

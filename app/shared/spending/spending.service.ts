@@ -6,6 +6,7 @@ import "rxjs/add/operator/map";
 import { Config } from "../config";
 import { Spending } from "./spending";
 import { Category } from "../category/category";
+import { Sum } from "../sum/sum";
 
 import * as moment from 'moment';
 
@@ -41,6 +42,28 @@ export class SpendingService {
       return {total: data.total, spendings: spendingList};
     })
     .catch(this.handleErrors);
+  }
+
+  sum(from: Date, to: Date) {
+    let headers = new Headers();
+    headers.append("x-auth-token", Config.token);
+    headers.append("Content-Type", "application/json");
+
+    let url = "api/spending/sum?from=" + moment(from).format("YYYY-MM-DD")
+      + "&to=" + moment(to).format("YYYY-MM-DD");
+
+    return this.http.get(Config.apiUrl + url, {
+      headers: headers
+    })
+      .map(res => res.json())
+      .map(data => {
+        let sumList = [];
+        data.forEach((s) => {
+          sumList.push(new Sum(s.name,s.sum,s.average,s.count));
+        });
+        return sumList;
+      })
+      .catch(this.handleErrors);
   }
 
   handleErrors(error: Response) {

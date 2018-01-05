@@ -1,0 +1,15 @@
+<ActionBar title="test">
+  <GridLayout columns="*, 20">
+    <Label text="Chart" class="action-label" column="0"></Label>
+    <Image src="res://list" width="20" height="20" class="right" column="2" class="right" [nsRouterLink]="['/list']"></Image>
+  </GridLayout>
+</ActionBar>
+
+<GridLayout rows="auto, *">
+
+  <GridLayout row="0" columns="*, auto, auto, auto" class="add-bar">
+    <Image src="res://filter" (tap)="filter()" width="20" height="20" col="2"></Image>
+  </GridLayout>
+
+  <ActivityIndicator [busy]="isLoading" [visibility]="isLoading ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
+</GridLayout>
