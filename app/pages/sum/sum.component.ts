@@ -12,6 +12,8 @@ import * as dialogs from "ui/dialogs";
 
 import { Sum } from '../../shared/sum/sum';
 
+import { ObservableArray } from "tns-core-modules/data/observable-array";
+
 @Component({
   selector: "sum",
   moduleId: module.id,
@@ -40,6 +42,11 @@ export class SumComponent implements OnInit {
     this.isLoading = true;
     this.listLoaded = false;
     this.search();
+    this.sumList = [];
+  }
+
+  pageLoaded() {
+    console.log("loaded");
   }
 
   search() {
@@ -48,14 +55,13 @@ export class SumComponent implements OnInit {
 
     this.spendingService.sum(this.from, this.to)
       .subscribe(res => {
-        this.sumList = [];
-        res.forEach((spend) => {
+        this.sumList = res;
+        /*res.forEach((spend) => {
           this.sumList.unshift(spend);
-        });
+        });*/
 
         this.isLoading = false;
         this.listLoaded = true;
-        console.log(JSON.stringify(this.sumList));
       });
   }
 

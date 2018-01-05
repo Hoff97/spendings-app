@@ -1,15 +1,31 @@
-<ActionBar title="test">
+<ActionBar title="test" loaded="pageLoaded" xmlns:chart="nativescript-pro-ui/chart">
   <GridLayout columns="*, 20">
     <Label text="Chart" class="action-label" column="0"></Label>
     <Image src="res://list" width="20" height="20" class="right" column="2" class="right" [nsRouterLink]="['/list']"></Image>
   </GridLayout>
 </ActionBar>
 
-<GridLayout rows="auto, *">
+<GridLayout rows="auto, auto, *">
 
   <GridLayout row="0" columns="*, auto, auto, auto" class="add-bar">
     <Image src="res://filter" (tap)="filter()" width="20" height="20" col="2"></Image>
   </GridLayout>
+
+  <GridLayout row="1" columns="*,*,*">
+    <Label text="Category" col="0" class="medium-spacing"></Label>
+    <Label text="Sum" col="1" class="medium-spacing"></Label>
+    <Label text="Count" col="2" class="medium-spacing"></Label>
+  </GridLayout>
+
+  <ListView [items]="sumList" row="2" class="small-spacing" [class.visible]="listLoaded">
+    <ng-template let-item="item">
+      <GridLayout columns="*,*,*">
+        <Label [text]="item.name" col="0" class="medium-spacing"></Label>
+        <Label [text]="item.sum" col="1" class="medium-spacing"></Label>
+        <Label [text]="item.count" col="2" class="medium-spacing"></Label>
+      </GridLayout>
+    </ng-template>
+  </ListView>
 
   <ActivityIndicator [busy]="isLoading" [visibility]="isLoading ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
 </GridLayout>
