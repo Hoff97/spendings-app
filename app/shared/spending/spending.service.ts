@@ -9,12 +9,16 @@ import { Category } from "../category/category";
 import { Sum } from "../sum/sum";
 
 import * as moment from 'moment';
+import * as bghttp from "nativescript-background-http";
 
 @Injectable()
 export class SpendingService {
   editing: Spending;
 
-  constructor(private http: Http) {}
+  session: bghttp.Session;
+
+  constructor(private http: Http) {
+  }
 
   query(search: string, sort: string, fro: Date, to: Date, page: number, pageSize: number) {
     let headers = new Headers();
@@ -31,17 +35,17 @@ export class SpendingService {
     return this.http.get(Config.apiUrl + url, {
       headers: headers
     })
-      .map(res => {return {total: res.headers.get("x-number-items"), result: res.json()};})
-    .map(data => {
-      let spendingList = [];
-      data.result.forEach((spending) => {
-        spendingList.push(new Spending(spending.id, spending.amount,
-                                       new Category(spending.category.id,spending.category.name,spending.category.parent),
-                                       spending.description, spending.date));
-      });
-      return {total: data.total, spendings: spendingList};
-    })
-    .catch(this.handleErrors);
+      .map(res => { return { total: res.headers.get("x-number-items"), result: res.json() }; })
+      .map(data => {
+        let spendingList = [];
+        data.result.forEach((spending) => {
+          spendingList.push(new Spending(spending.id, spending.amount,
+            new Category(spending.category.id, spending.category.name, spending.category.parent),
+            spending.description, spending.date));
+        });
+        return { total: data.total, spendings: spendingList };
+      })
+      .catch(this.handleErrors);
   }
 
   sum(from: Date, to: Date) {
@@ -59,7 +63,7 @@ export class SpendingService {
       .map(data => {
         let sumList = [];
         data.forEach((s) => {
-          sumList.push(new Sum(s.name,s.sum,s.average,s.count));
+          sumList.push(new Sum(s.name, s.sum, s.average, s.count));
         });
         return sumList;
       })
@@ -72,7 +76,7 @@ export class SpendingService {
   }
 
   add(date: string, categoryId: number, amount: number, description: string) {
-     let headers = new Headers();
+    let headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("x-auth-token", Config.token);
 
@@ -91,7 +95,7 @@ export class SpendingService {
       .do(data => {
         console.log(data);
       })
-        .catch(this.handleErrors);
+      .catch(this.handleErrors);
   }
 
   edit(id: number, date: string, categoryId: number, amount: number, description: string) {
@@ -115,7 +119,7 @@ export class SpendingService {
       .do(data => {
         console.log(data);
       })
-        .catch(this.handleErrors);
+      .catch(this.handleErrors);
   }
 
   delete(spending: Spending) {
@@ -131,7 +135,7 @@ export class SpendingService {
       .do(data => {
         console.log(data);
       })
-        .catch(this.handleErrors);
+      .catch(this.handleErrors);
   }
 
 
@@ -152,7 +156,7 @@ export class SpendingService {
       .do(data => {
         console.log(data);
       })
-        .catch(this.handleErrors);
+      .catch(this.handleErrors);
   }
 
   getCategories() {
@@ -163,14 +167,33 @@ export class SpendingService {
     return this.http.get(Config.apiUrl + "api/category", {
       headers: headers
     })
-    .map(res => res.json())
-    .map(data => {
-      let categoryList = [];
-      data.forEach((category) => {
-        categoryList.push(new Category(category.id,category.name,category.parent));
-      });
-      return categoryList;
-    })
-    .catch(this.handleErrors);
+      .map(res => res.json())
+      .map(data => {
+        let categoryList = [];
+        data.forEach((category) => {
+          categoryList.push(new Category(category.id, category.name, category.parent));
+        });
+        return categoryList;
+      })
+      .catch(this.handleErrors);
+  }
+
+  scanRecipe(image) {
+    this.session = bghttp.session("image-upload");
+    var request = {
+      url: Config.apiUrl + "api/image/scanSpending",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "File-Name": "image.jpg"
+      },
+      description: "{ 'uploading': 'image.jpg' }"
+    };
+
+    let task = this.session.uploadFile(image.fileUri, request);
+
+    /*task.on("progress", logEvent);
+    task.on("error", logEvent);
+    task.on("complete", logEvent);*/
   }
 }
