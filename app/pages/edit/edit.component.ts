@@ -26,41 +26,38 @@ export class EditComponent implements OnInit {
   categories: Array<Category>;
 
   constructor(private spendingService: SpendingService, private router: Router,
-              private filterService: FilterService) {
+    private filterService: FilterService) {
     this.spending = filterService.edit;
     this.date = new Date(this.spending.date);
 
     this.spendingService.getCategories()
-      .subscribe(cat => {this.categories = cat;});
+      .subscribe(cat => { this.categories = cat; });
   }
 
   ngOnInit() {
   }
 
   submit() {
-    let dateS = this.date.getFullYear()
-      + "-" + (this.date.getMonth()+1 < 10 ? "0" : "") + (this.date.getMonth()+1)
-      + "-" + (this.date.getDay() < 10 ? "0" : "") + this.date.getDay();
     let catI = -1;
-    for(var cat of this.categories) {
-      if(cat.name == this.spending.category.name)
+    for (var cat of this.categories) {
+      if (cat.name == this.spending.category.name)
         catI = cat.id;
     }
-    if(catI == -1) {
+    if (catI == -1) {
       this.spendingService.addCategory(this.spending.category.name)
         .subscribe(c => {
           catI = c.id
-          this.spendingService.add(dateS,catI,this.spending.amount,this.spending.description)
+          this.spendingService.add(this.date, catI, this.spending.amount, this.spending.description)
             .subscribe(spend => {
               this.router.navigate(["/list"]);
             });
         });
     } else {
-      this.spendingService.edit(this.spending.id,dateS,catI,this.spending.amount,this.spending.description)
+      this.spendingService.edit(this.spending.id, this.date, catI, this.spending.amount, this.spending.description)
         .subscribe(spend => {
 
-        this.router.navigate(["/list"]);
-      });
+          this.router.navigate(["/list"]);
+        });
     }
   }
 }

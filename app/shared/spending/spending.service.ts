@@ -75,7 +75,7 @@ export class SpendingService {
     return Observable.throw(error);
   }
 
-  add(date: string, categoryId: number, amount: number, description: string) {
+  add(date: Date, categoryId: number, amount: number, description: string) {
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("x-auth-token", Config.token);
@@ -83,7 +83,7 @@ export class SpendingService {
     return this.http.post(
       Config.apiUrl + "api/spending",
       JSON.stringify({
-        date: date,
+        date: moment(date).format("YYYY-MM-DD"),
         categoryFk: categoryId,
         description: description,
         amount: amount,
@@ -98,7 +98,7 @@ export class SpendingService {
       .catch(this.handleErrors);
   }
 
-  edit(id: number, date: string, categoryId: number, amount: number, description: string) {
+  edit(id: number, date: Date, categoryId: number, amount: number, description: string) {
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("x-auth-token", Config.token);
@@ -107,7 +107,7 @@ export class SpendingService {
       Config.apiUrl + "api/spending/" + id,
       JSON.stringify({
         id: id,
-        date: date,
+        date: moment(date).format("YYYY-MM-DD"),
         categoryFk: categoryId,
         description: description,
         amount: amount,

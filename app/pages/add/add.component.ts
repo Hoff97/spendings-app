@@ -41,9 +41,6 @@ export class AddComponent implements OnInit {
   }
 
   submit() {
-    let dateS = this.date.getFullYear()
-      + "-" + (this.date.getMonth() + 1 < 10 ? "0" : "") + (this.date.getMonth() + 1)
-      + "-" + (this.date.getDay() < 10 ? "0" : "") + this.date.getDay();
     let catI = -1;
     for (var cat of this.categories) {
       if (cat.name == this.spending.category.name)
@@ -53,13 +50,13 @@ export class AddComponent implements OnInit {
       this.spendingService.addCategory(this.spending.category.name)
         .subscribe(c => {
           catI = c.id
-          this.spendingService.add(dateS, catI, this.spending.amount, this.spending.description)
+          this.spendingService.add(this.date, catI, this.spending.amount, this.spending.description)
             .subscribe(spend => {
               this.router.navigate(["/list"]);
             });
         });
     } else {
-      this.spendingService.add(dateS, catI, this.spending.amount, this.spending.description)
+      this.spendingService.add(this.date, catI, this.spending.amount, this.spending.description)
         .subscribe(spend => {
           this.router.navigate(["/list"]);
         });
