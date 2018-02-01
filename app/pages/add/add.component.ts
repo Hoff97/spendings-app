@@ -69,7 +69,8 @@ export class AddComponent implements OnInit {
       camera.takePicture()
         .then((imageAsset) => {
           console.log("Result is an image asset instance");
-
+	  //try handing over an Image.src=imageAsset
+          //https://docs.nativescript.org/api-reference/classes/_image_source_.imagesource
         }).catch((err) => {
           console.log("Error -> " + err.message);
         });
@@ -90,6 +91,7 @@ export class AddComponent implements OnInit {
   }
 
   pickImage() {
+    console.log("yay");
     let context = imagepicker.create({
       mode: "single" // use "multiple" for multiple selection
 
@@ -104,11 +106,7 @@ export class AddComponent implements OnInit {
 
         }
       }).catch(e => {
-        // process error
+        console.log(e);
       });
-  }
-
-  logEvent(e) {
-    console.log(e.eventName);
   }
 }

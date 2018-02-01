@@ -179,21 +179,53 @@ export class SpendingService {
   }
 
   scanRecipe(image) {
+    console.log("scanning");
+
     this.session = bghttp.session("image-upload");
+
+    /*let headers = new Headers();
+    headers.append("Content-Type", "multipart/form-data");
+    headers.append("File-Name", "image");
+    headers.append("x-auth-token",Config.token);
+    headers.append("Accept", "application/json");
+
     var request = {
       url: Config.apiUrl + "api/image/scanSpending",
       method: "POST",
       headers: {
-        "Content-Type": "application/octet-stream",
-        "File-Name": "image.jpg"
+        "Content-Type": "multipart/form-data",
+        "File-Name": "image",
+        "x-auth-token": Config.token,
+        "Accept": "application/json"
       },
-      description: "{ 'uploading': 'image.jpg' }"
+      "description": "Uploading image"
     };
 
-    let task = this.session.uploadFile(image.fileUri, request);
+    let task = this.session.uploadFile(image.fileUri, request);*/
 
-    /*task.on("progress", logEvent);
-    task.on("error", logEvent);
-    task.on("complete", logEvent);*/
+    var request = {
+		url: Config.apiUrl + "api/image/scanSpending",
+		method: "POST",
+		headers: {
+			"Content-Type": "application/octet-stream",
+			"File-Name": "image",
+                        "x-auth-token": Config.token,
+                        "Accept": "application/json"
+		},
+		description: "test"
+	};
+    let task: bghttp.Task;
+    var params = [{ name: "image", filename: image.fileUri, mimeType: 'image/jpeg' }];
+    task = this.session.multipartUpload(params, request);
+
+    task.on("progress", this.logEvent);
+    task.on("error", this.logEvent);
+    task.on("complete", this.logEvent);
+    task.on("responded", this.logEvent);
+  }
+
+  logEvent(e) {
+    console.log(JSON.stringify(e));
+
   }
 }
